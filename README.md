@@ -4,7 +4,7 @@ Generate HTML from JSON or javascript objects and arrays
 Generally, a tree, also known as an element, looks like this:
 
     [
-        'a'.
+        'a',
         { href: 'http://example.com' },
         'This is an example',
         [ 'br', {} ]
