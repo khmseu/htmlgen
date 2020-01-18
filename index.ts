@@ -2,11 +2,11 @@
 
 // $Id: htmlgen.ts 24 2020-01-12 15:09:51Z kai $
 
-type JHash = { [name: string]: string };
-type JElement = string | JTree;
-type JArrayElement = JHash | JElement;
-type JArray = JArrayElement[];
-interface JTree extends JArray {
+export type JHash = { [name: string]: string };
+export type JElement = string | JTree;
+export type JArrayElement = JHash | JElement;
+export type JArray = JArrayElement[];
+export interface JTree extends JArray {
   0: string;
   1: JHash;
   // default: JElement;
