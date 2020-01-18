@@ -7,7 +7,7 @@ Generally, a tree, also known as an element, looks like this:
         'a',
         { href: 'http://example.com' },
         'This is an example',
-        [ 'br', {} ]
+        [ 'br', {} ],
         'link &<stuff>'
     ]
 for `<a href="http://example.com">This is an example<br>link &amp;&lt;stuff&gt;</a>`
