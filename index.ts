@@ -2,7 +2,7 @@
 
 // $Id: htmlgen.ts 24 2020-01-12 15:09:51Z kai $
 
-export type JHash = { [name: string]: string };
+export type JHash = { [name: string]: string | number };
 export type JElement = string | JTree;
 export type JArrayElement = JHash | JElement;
 export type JArray = JArrayElement[];

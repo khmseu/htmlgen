@@ -1,5 +1,5 @@
 export declare type JHash = {
-    [name: string]: string;
+    [name: string]: string | number;
 };
 export declare type JElement = string | JTree;
 export declare type JArrayElement = JHash | JElement;
