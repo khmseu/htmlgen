@@ -41,7 +41,7 @@ Build a `<span>` element.
     //   subtree,
     // ]
     function mkhtml(tree: JElement): string[]
-Convert an element tree into a string array (`.join('')` to make an HTML string)
+Convert an element tree into a string array (because pushing on an array is faster than appending to a string; `.join('')` to make an HTML string)
 
     // Mergeable tree format:
     // tree = 'string'
