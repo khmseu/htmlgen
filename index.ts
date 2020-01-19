@@ -81,7 +81,7 @@ export function mkhtml(tree: JElement): string[] {
     const attrs = tree[1];
     let arr: string[] = [];
     arr.push("<", name);
-    for (const attr in attrs) {
+    for (const attr in Object.keys(attrs).sort()) {
       arr.push(" ", attr, '="', enc(attrs[attr], "attribute value"), '"');
     }
     arr.push(">");
@@ -98,7 +98,7 @@ export function mkhtml(tree: JElement): string[] {
         break;
       case "<!>":
         assert(tree.length === 3, "Bad length, usage ['<!>', {}, 'the comment']");
-        arr = ["<!--", enc(tree[2], "comment"), "-->"];
+        arr = ["<!-- ", enc(tree[2], "comment"), " -->"];
         break;
       case "<cdata>":
         assert(tree.length === 3, "Bad length, usage ['<cdata>', {}, 'the data']");

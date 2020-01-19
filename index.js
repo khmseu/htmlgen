@@ -80,7 +80,7 @@ function mkhtml(tree) {
         var attrs = tree[1];
         var arr = [];
         arr.push("<", name_1);
-        for (var attr in attrs) {
+        for (var attr in Object.keys(attrs).sort()) {
             arr.push(" ", attr, '="', enc(attrs[attr], "attribute value"), '"');
         }
         arr.push(">");
@@ -98,7 +98,7 @@ function mkhtml(tree) {
                 break;
             case "<!>":
                 assert_1.default(tree.length === 3, "Bad length, usage ['<!>', {}, 'the comment']");
-                arr = ["<!--", enc(tree[2], "comment"), "-->"];
+                arr = ["<!-- ", enc(tree[2], "comment"), " -->"];
                 break;
             case "<cdata>":
                 assert_1.default(tree.length === 3, "Bad length, usage ['<cdata>', {}, 'the data']");
