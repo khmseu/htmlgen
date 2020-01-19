@@ -13,5 +13,6 @@
   "dependencies": {
     "html-entities": "^1.2.1",
     "html-tags": "^3.1.0"
-  }
+  },
+  "types": "index.d.ts"
 }
