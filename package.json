@@ -5,6 +5,10 @@
   "main": "index.js",
   "author": "kai-htmlgen@cats.ms",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/khmseu/htmlgen.git"
+  },
   "devDependencies": {
     "@types/html-entities": "^1.2.16",
     "@types/node": "^13.1.8",
