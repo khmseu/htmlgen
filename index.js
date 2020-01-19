@@ -80,7 +80,8 @@ function mkhtml(tree) {
         var attrs = tree[1];
         var arr = [];
         arr.push("<", name_1);
-        for (var attr in Object.keys(attrs).sort()) {
+        for (var _b = 0, _c = Object.keys(attrs).sort(); _b < _c.length; _b++) {
+            var attr = _c[_b];
             arr.push(" ", attr, '="', enc(attrs[attr], "attribute value"), '"');
         }
         arr.push(">");
@@ -89,8 +90,8 @@ function mkhtml(tree) {
                 arr = []; /* reset */
                 var condition = attrs.expr;
                 arr.push("<!--[if " + condition + "]>");
-                for (var _b = 0, _c = tree.slice(2); _b < _c.length; _b++) {
-                    var e2 = _c[_b];
+                for (var _d = 0, _e = tree.slice(2); _d < _e.length; _d++) {
+                    var e2 = _e[_d];
                     var res = mkhtml(e2);
                     arr = arr.concat(res);
                 }
@@ -113,8 +114,8 @@ function mkhtml(tree) {
                 arr = ["<!DOCTYPE ", tree[2], ">"];
                 break;
             default:
-                for (var _d = 0, _e = tree.slice(2); _d < _e.length; _d++) {
-                    var e2 = _e[_d];
+                for (var _f = 0, _g = tree.slice(2); _f < _g.length; _f++) {
+                    var e2 = _g[_f];
                     var res = mkhtml(e2);
                     arr = arr.concat(res);
                 }

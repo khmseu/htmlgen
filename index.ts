@@ -81,7 +81,7 @@ export function mkhtml(tree: JElement): string[] {
     const attrs = tree[1];
     let arr: string[] = [];
     arr.push("<", name);
-    for (const attr in Object.keys(attrs).sort()) {
+    for (const attr of Object.keys(attrs).sort()) {
       arr.push(" ", attr, '="', enc(attrs[attr], "attribute value"), '"');
     }
     arr.push(">");

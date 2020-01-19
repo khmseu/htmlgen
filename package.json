@@ -6,6 +6,8 @@
   "author": "kai-htmlgen@cats.ms",
   "license": "MIT",
   "devDependencies": {
+    "@types/html-entities": "^1.2.16",
+    "@types/node": "^13.1.8",
     "typescript": "^3.7.5"
   },
   "dependencies": {
