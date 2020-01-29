@@ -34,8 +34,8 @@ function span(id, class_, contents) {
 exports.span = span;
 var ents0 = require("html-entities");
 var ents = ents0.Html4Entities;
-var void_1 = __importDefault(require("html-tags/void"));
 var assert_1 = __importDefault(require("assert"));
+var void_1 = __importDefault(require("html-tags/void"));
 var singular = {
     "<if>": 1,
     "<!>": 1,
@@ -141,6 +141,9 @@ exports.mkhtml = mkhtml;
 // Params format:
 // { pname: tree, pname: attrib, }
 function mergetree(tree, params) {
+    if (typeof tree === "string" && tree[0] === "$") {
+        return "" + params[tree.slice(1)];
+    }
     if (typeof tree !== "object" || !tree) {
         return String(tree);
     }

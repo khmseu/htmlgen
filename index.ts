@@ -35,8 +35,8 @@ export function span(id: string, class_: string, contents: JElement[]) {
 
 import ents0 = require("html-entities");
 const ents = ents0.Html4Entities;
-import voidHtmlTags from "html-tags/void";
 import assert from "assert";
+import voidHtmlTags from "html-tags/void";
 
 const singular: { [s: string]: 1 } = {
   "<if>": 1,
@@ -139,6 +139,9 @@ export function mkhtml(tree: JElement): string[] {
 // Params format:
 // { pname: tree, pname: attrib, }
 export function mergetree(tree: string | number | JTree, params: { [x: string]: any }): JElement {
+  if (typeof tree === "string" && tree[0] === "$") {
+    return `${params[tree.slice(1)]}`;
+  }
   if (typeof tree !== "object" || !tree) {
     return String(tree);
   } else {
