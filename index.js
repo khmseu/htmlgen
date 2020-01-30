@@ -130,7 +130,7 @@ function mkhtml(tree) {
 exports.mkhtml = mkhtml;
 // Mergeable tree format:
 // tree = 'string'
-// tree = ['$pname', _] => recurse tree params[pname]
+// tree = '$pname' => recurse tree params[pname]
 // tree = [
 //   'name',
 //   { attr: val, attr: val,},
@@ -140,29 +140,43 @@ exports.mkhtml = mkhtml;
 // ]
 // Params format:
 // { pname: tree, pname: attrib, }
+function pget(p, params) {
+    p = p.slice(1);
+    var m = p.match(/^(\w+)(.*)$/);
+    if (!m)
+        throw Error("Bad parameter '" + p + "'");
+    var ret = Function("(function(param) {\n      return params[" + m[0] + "]" + m[1] + ";\n    })")(params);
+    return ret;
+}
 function mergetree(tree, params) {
     if (typeof tree === "string" && tree[0] === "$") {
-        return "" + params[tree.slice(1)];
+        return mergetree(pget(tree, params), params);
     }
     if (typeof tree !== "object" || !tree) {
-        return String(tree);
+        return "" + tree;
     }
     else {
         var name_2 = tree[0];
         var attrs = tree[1];
         var arr = [name_2, {}];
         if (name_2[0] === "$" && tree.length === 2) {
-            var p = params[name_2.slice(1)];
+            var p = pget(name_2, params);
             return mergetree(p, params);
         }
         for (var attr in attrs) {
-            var v = attrs[attr];
             if (attr[0] === "$") {
-                var p = params[attr.slice(1)];
-                arr[1][p[0]] = p[1];
+                var p = pget(attr, params);
+                arr[1][p[0]] = "" + p[1];
             }
             else {
-                arr[1][attr] = v;
+                var v = "" + attrs[attr];
+                if (v[0] === "$") {
+                    var p = pget(v, params);
+                    arr[1][attr] = "" + p;
+                }
+                else {
+                    arr[1][attr] = "" + v;
+                }
             }
         }
         for (var _i = 0, _a = tree.slice(2); _i < _a.length; _i++) {

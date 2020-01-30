@@ -37,6 +37,7 @@ import ents0 = require("html-entities");
 const ents = ents0.Html4Entities;
 import assert from "assert";
 import voidHtmlTags from "html-tags/void";
+import { parentPort } from "worker_threads";
 
 const singular: { [s: string]: 1 } = {
   "<if>": 1,
@@ -128,7 +129,7 @@ export function mkhtml(tree: JElement): string[] {
 
 // Mergeable tree format:
 // tree = 'string'
-// tree = ['$pname', _] => recurse tree params[pname]
+// tree = '$pname' => recurse tree params[pname]
 // tree = [
 //   'name',
 //   { attr: val, attr: val,},
@@ -138,27 +139,43 @@ export function mkhtml(tree: JElement): string[] {
 // ]
 // Params format:
 // { pname: tree, pname: attrib, }
+function pget(p: string, params: { [x: string]: any }): any {
+  p = p.slice(1);
+  const m = p.match(/^(\w+)(.*)$/);
+  if (!m) throw Error(`Bad parameter '${p}'`);
+  const ret = Function(
+    `(function(param) {
+      return params[${m[0]}]${m[1]};
+    })`,
+  )(params);
+  return ret;
+}
 export function mergetree(tree: string | number | JTree, params: { [x: string]: any }): JElement {
   if (typeof tree === "string" && tree[0] === "$") {
-    return `${params[tree.slice(1)]}`;
+    return mergetree(pget(tree, params), params);
   }
   if (typeof tree !== "object" || !tree) {
-    return String(tree);
+    return `${tree}`;
   } else {
     const name = tree[0];
     const attrs = tree[1];
     const arr: JTree = [name, {}];
     if (name[0] === "$" && tree.length === 2) {
-      const p = params[name.slice(1)];
+      const p = pget(name, params);
       return mergetree(p, params);
     }
     for (const attr in attrs) {
-      const v = attrs[attr];
       if (attr[0] === "$") {
-        const p = params[attr.slice(1)];
-        arr[1][p[0]] = p[1];
+        const p = pget(attr, params);
+        arr[1][p[0]] = `${p[1]}`;
       } else {
-        arr[1][attr] = v;
+        const v = `${attrs[attr]}`;
+        if (v[0] === "$") {
+          const p = pget(v, params);
+          arr[1][attr] = `${p}`;
+        } else {
+          arr[1][attr] = `${v}`;
+        }
       }
     }
     for (const e2 of tree.slice(2) as JElement[]) {
