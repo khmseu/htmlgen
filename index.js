@@ -142,10 +142,7 @@ exports.mkhtml = mkhtml;
 // { pname: tree, pname: attrib, }
 function pget(p, params) {
     p = p.slice(1);
-    var m = p.match(/^(\w+)(.*)$/);
-    if (!m)
-        throw Error("Bad parameter '" + p + "'");
-    var ret = Function("(function(param) {\n      return params[" + m[0] + "]" + m[1] + ";\n    })")(params);
+    var ret = Function("(function(param) {\n      return params." + p + ";\n    })")(params);
     return ret;
 }
 function mergetree(tree, params) {

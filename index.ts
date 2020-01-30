@@ -141,11 +141,9 @@ export function mkhtml(tree: JElement): string[] {
 // { pname: tree, pname: attrib, }
 function pget(p: string, params: { [x: string]: any }): any {
   p = p.slice(1);
-  const m = p.match(/^(\w+)(.*)$/);
-  if (!m) throw Error(`Bad parameter '${p}'`);
   const ret = Function(
     `(function(param) {
-      return params[${m[0]}]${m[1]};
+      return params.${p};
     })`,
   )(params);
   return ret;
