@@ -141,7 +141,7 @@ export function mkhtml(tree: JElement): string[] {
 // { pname: tree, pname: attrib, }
 function pget(p: string, params: { [x: string]: any }): any {
   const p1 = p.slice(1);
-  const func = `(function(param) {
+  const func = `(function(params) {
       return params.${p1};
     })`;
   const ret = Function(func)(params);

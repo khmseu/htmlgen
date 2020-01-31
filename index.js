@@ -142,7 +142,7 @@ exports.mkhtml = mkhtml;
 // { pname: tree, pname: attrib, }
 function pget(p, params) {
     var p1 = p.slice(1);
-    var func = "(function(param) {\n      return params." + p1 + ";\n    })";
+    var func = "(function(params) {\n      return params." + p1 + ";\n    })";
     var ret = Function(func)(params);
     console.log({ params: params, p: p, p1: p1, func: func, ret: ret });
     return ret;
