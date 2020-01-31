@@ -131,28 +131,30 @@ export function mkhtml(tree: JElement): string[] {
 // Mergeable tree format:
 // tree = 'string'
 // tree = '$pname' => recurse tree params[pname]
+// tree = ['$pname', _] => recurse tree params[pname]
 // tree = [
 //   'name',
 //   { attr: val, attr: val,},
 //   { attr: val, '$pname': _ } => { aname, avalue } = params[pname]
+//   { attr: val, attr: '$pname' } => { aname, avalue } = { aname, params[pname] }
 //   subtree,
 //   subtree,
 // ]
 // Params format:
 // { pname: tree, pname: attrib, }
-function pget(p: string, params: { [x: string]: any }): any {
+function pget(p: string, params: { [x: string]: any }, where: string): any {
   const p1 = p.slice(1);
   const func = `"use strict"; return (params) => { return params.${p1}; }`;
   const F = Function(func);
   const FF = F();
   const ret = FF(params);
-  console.log({ params, p, p1, func, F, FF, ret });
+  console.log({ where, params, p, p1, func, F, FF, ret });
   return ret;
 }
 
 export function mergetree(tree: string | number | JTree, params: { [x: string]: any }): JElement {
   if (typeof tree === "string" && tree[0] === "$") {
-    return mergetree(pget(tree, params), params);
+    return mergetree(pget(tree, params, "$tree"), params);
   }
   if (typeof tree !== "object" || !tree) {
     return `${tree}`;
@@ -161,17 +163,17 @@ export function mergetree(tree: string | number | JTree, params: { [x: string]: 
     const attrs = tree[1];
     const arr: JTree = [name, {}];
     if (name[0] === "$" && tree.length === 2) {
-      const p = pget(name, params);
+      const p = pget(name, params, "tree:[$name,_]");
       return mergetree(p, params);
     }
     for (const attr in attrs) {
       if (attr[0] === "$") {
-        const p = pget(attr, params);
+        const p = pget(attr, params, "$attr");
         arr[1][p[0]] = `${p[1]}`;
       } else {
         const v = `${attrs[attr]}`;
         if (v[0] === "$") {
-          const p = pget(v, params);
+          const p = pget(v, params, "attr=$");
           arr[1][attr] = `${p}`;
         } else {
           arr[1][attr] = `${v}`;

@@ -132,27 +132,29 @@ exports.mkhtml = mkhtml;
 // Mergeable tree format:
 // tree = 'string'
 // tree = '$pname' => recurse tree params[pname]
+// tree = ['$pname', _] => recurse tree params[pname]
 // tree = [
 //   'name',
 //   { attr: val, attr: val,},
 //   { attr: val, '$pname': _ } => { aname, avalue } = params[pname]
+//   { attr: val, attr: '$pname' } => { aname, avalue } = { aname, params[pname] }
 //   subtree,
 //   subtree,
 // ]
 // Params format:
 // { pname: tree, pname: attrib, }
-function pget(p, params) {
+function pget(p, params, where) {
     var p1 = p.slice(1);
     var func = "\"use strict\"; return (params) => { return params." + p1 + "; }";
     var F = Function(func);
     var FF = F();
     var ret = FF(params);
-    console.log({ params: params, p: p, p1: p1, func: func, F: F, FF: FF, ret: ret });
+    console.log({ where: where, params: params, p: p, p1: p1, func: func, F: F, FF: FF, ret: ret });
     return ret;
 }
 function mergetree(tree, params) {
     if (typeof tree === "string" && tree[0] === "$") {
-        return mergetree(pget(tree, params), params);
+        return mergetree(pget(tree, params, "$tree"), params);
     }
     if (typeof tree !== "object" || !tree) {
         return "" + tree;
@@ -162,18 +164,18 @@ function mergetree(tree, params) {
         var attrs = tree[1];
         var arr = [name_2, {}];
         if (name_2[0] === "$" && tree.length === 2) {
-            var p = pget(name_2, params);
+            var p = pget(name_2, params, "tree:[$name,_]");
             return mergetree(p, params);
         }
         for (var attr in attrs) {
             if (attr[0] === "$") {
-                var p = pget(attr, params);
+                var p = pget(attr, params, "$attr");
                 arr[1][p[0]] = "" + p[1];
             }
             else {
                 var v = "" + attrs[attr];
                 if (v[0] === "$") {
-                    var p = pget(v, params);
+                    var p = pget(v, params, "attr=$");
                     arr[1][attr] = "" + p;
                 }
                 else {
