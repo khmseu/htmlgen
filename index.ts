@@ -114,6 +114,7 @@ export function mkhtml(tree: JElement): string[] {
         arr = ["<!DOCTYPE ", tree[2] as string, ">"];
         break;
       default:
+        console.log({ tree });
         for (const e2 of tree.slice(2) as JElement[]) {
           const res = mkhtml(e2);
           arr = arr.concat(res);

@@ -114,6 +114,7 @@ function mkhtml(tree) {
                 arr = ["<!DOCTYPE ", tree[2], ">"];
                 break;
             default:
+                console.log({ tree: tree });
                 for (var _f = 0, _g = tree.slice(2); _f < _g.length; _f++) {
                     var e2 = _g[_f];
                     var res = mkhtml(e2);
