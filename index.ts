@@ -141,13 +141,14 @@ export function mkhtml(tree: JElement): string[] {
 // { pname: tree, pname: attrib, }
 function pget(p: string, params: { [x: string]: any }): any {
   const p1 = p.slice(1);
-  const func = `(function(params) {
-      return params.${p1};
-    })`;
-  const ret = Function(func)(params);
-  console.log({ params, p, p1, func, ret });
+  const func = `"use strict"; return (params) => { return params.${p1}; }`;
+  const F = Function(func);
+  const FF = F();
+  const ret = FF(params);
+  console.log({ params, p, p1, func, F, FF, ret });
   return ret;
 }
+
 export function mergetree(tree: string | number | JTree, params: { [x: string]: any }): JElement {
   if (typeof tree === "string" && tree[0] === "$") {
     return mergetree(pget(tree, params), params);

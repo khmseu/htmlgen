@@ -142,9 +142,11 @@ exports.mkhtml = mkhtml;
 // { pname: tree, pname: attrib, }
 function pget(p, params) {
     var p1 = p.slice(1);
-    var func = "(function(params) {\n      return params." + p1 + ";\n    })";
-    var ret = Function(func)(params);
-    console.log({ params: params, p: p, p1: p1, func: func, ret: ret });
+    var func = "\"use strict\"; return (params) => { return params." + p1 + "; }";
+    var F = Function(func);
+    var FF = F();
+    var ret = FF(params);
+    console.log({ params: params, p: p, p1: p1, func: func, F: F, FF: FF, ret: ret });
     return ret;
 }
 function mergetree(tree, params) {
