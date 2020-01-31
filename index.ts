@@ -67,7 +67,7 @@ function enc(s: any, who: string) {
 //   subtree,
 // ]
 export function mkhtml(tree: JElement): string[] {
-  console.log("mkhtml", { tree });
+  // console.log("mkhtml", { tree });
   if (typeof tree !== "object" || !tree) {
     return [enc(tree, "tree is string")];
   } else if (classof(tree) === "Array" && (tree.length === 0 || classof(tree[0]) === "Array")) {
@@ -114,7 +114,7 @@ export function mkhtml(tree: JElement): string[] {
         arr = ["<!DOCTYPE ", tree[2] as string, ">"];
         break;
       default:
-        console.log({ tree });
+        // console.log({ tree });
         for (const e2 of tree.slice(2) as JElement[]) {
           const res = mkhtml(e2);
           arr = arr.concat(res);
@@ -148,12 +148,12 @@ function pget(p: string, params: { [x: string]: any }, where: string): any {
   const F = Function(func);
   const FF = F();
   const ret = FF(params);
-  console.log("pget", { where, params, p, p1, func, F, FF, ret });
+  // console.log("pget", { where, params, p, p1, func, F, FF, ret });
   return ret;
 }
 
 export function mergetree(tree: string | number | JTree, params: { [x: string]: any }): JElement {
-  console.log("mergetree", { tree });
+  // console.log("mergetree", { tree });
   if (typeof tree === "string" && tree[0] === "$") {
     return mergetree(pget(tree, params, "$tree"), params);
   } else if (typeof tree !== "object" || !tree) {
@@ -166,7 +166,7 @@ export function mergetree(tree: string | number | JTree, params: { [x: string]: 
     }
     const arr: JTree = [name, {}];
     const attrs = tree[1];
-    console.log("mergetree:preattr", { arr, attrs });
+    // console.log("mergetree:preattr", { arr, attrs });
     for (const attr in attrs) {
       if (attr[0] === "$") {
         const p = pget(attr, params, "$attr=_");
@@ -181,12 +181,12 @@ export function mergetree(tree: string | number | JTree, params: { [x: string]: 
         }
       }
     }
-    console.log("mergetree:postattr", { arr, attrs });
+    // console.log("mergetree:postattr", { arr, attrs });
     for (const e2 of tree.slice(2) as JElement[]) {
       const res = mergetree(e2, params);
       arr.push(res);
     }
-    console.log("mergetree:return", { arr });
+    // console.log("mergetree:return", { arr });
     return arr;
   }
 }

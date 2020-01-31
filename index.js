@@ -63,7 +63,7 @@ function enc(s, who) {
 //   subtree,
 // ]
 function mkhtml(tree) {
-    console.log("mkhtml", { tree: tree });
+    // console.log("mkhtml", { tree });
     if (typeof tree !== "object" || !tree) {
         return [enc(tree, "tree is string")];
     }
@@ -115,7 +115,7 @@ function mkhtml(tree) {
                 arr = ["<!DOCTYPE ", tree[2], ">"];
                 break;
             default:
-                console.log({ tree: tree });
+                // console.log({ tree });
                 for (var _f = 0, _g = tree.slice(2); _f < _g.length; _f++) {
                     var e2 = _g[_f];
                     var res = mkhtml(e2);
@@ -150,11 +150,11 @@ function pget(p, params, where) {
     var F = Function(func);
     var FF = F();
     var ret = FF(params);
-    console.log("pget", { where: where, params: params, p: p, p1: p1, func: func, F: F, FF: FF, ret: ret });
+    // console.log("pget", { where, params, p, p1, func, F, FF, ret });
     return ret;
 }
 function mergetree(tree, params) {
-    console.log("mergetree", { tree: tree });
+    // console.log("mergetree", { tree });
     if (typeof tree === "string" && tree[0] === "$") {
         return mergetree(pget(tree, params, "$tree"), params);
     }
@@ -169,7 +169,7 @@ function mergetree(tree, params) {
         }
         var arr = [name_2, {}];
         var attrs = tree[1];
-        console.log("mergetree:preattr", { arr: arr, attrs: attrs });
+        // console.log("mergetree:preattr", { arr, attrs });
         for (var attr in attrs) {
             if (attr[0] === "$") {
                 var p = pget(attr, params, "$attr=_");
@@ -186,13 +186,13 @@ function mergetree(tree, params) {
                 }
             }
         }
-        console.log("mergetree:postattr", { arr: arr, attrs: attrs });
+        // console.log("mergetree:postattr", { arr, attrs });
         for (var _i = 0, _a = tree.slice(2); _i < _a.length; _i++) {
             var e2 = _a[_i];
             var res = mergetree(e2, params);
             arr.push(res);
         }
-        console.log("mergetree:return", { arr: arr });
+        // console.log("mergetree:return", { arr });
         return arr;
     }
 }
