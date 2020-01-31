@@ -166,6 +166,7 @@ export function mergetree(tree: string | number | JTree, params: { [x: string]: 
     }
     const arr: JTree = [name, {}];
     const attrs = tree[1];
+    console.log("mergetree:preattr", { arr, attrs });
     for (const attr in attrs) {
       if (attr[0] === "$") {
         const p = pget(attr, params, "$attr=_");
@@ -180,6 +181,7 @@ export function mergetree(tree: string | number | JTree, params: { [x: string]: 
         }
       }
     }
+    console.log("mergetree:postattr", { arr, attrs });
     for (const e2 of tree.slice(2) as JElement[]) {
       const res = mergetree(e2, params);
       arr.push(res);

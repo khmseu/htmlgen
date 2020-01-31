@@ -169,6 +169,7 @@ function mergetree(tree, params) {
         }
         var arr = [name_2, {}];
         var attrs = tree[1];
+        console.log("mergetree:preattr", { arr: arr, attrs: attrs });
         for (var attr in attrs) {
             if (attr[0] === "$") {
                 var p = pget(attr, params, "$attr=_");
@@ -185,6 +186,7 @@ function mergetree(tree, params) {
                 }
             }
         }
+        console.log("mergetree:postattr", { arr: arr, attrs: attrs });
         for (var _i = 0, _a = tree.slice(2); _i < _a.length; _i++) {
             var e2 = _a[_i];
             var res = mergetree(e2, params);
