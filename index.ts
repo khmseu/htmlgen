@@ -140,12 +140,14 @@ export function mkhtml(tree: JElement): string[] {
 // Params format:
 // { pname: tree, pname: attrib, }
 function pget(p: string, params: { [x: string]: any }): any {
+  console.log({ p });
   p = p.slice(1);
   const ret = Function(
     `(function(param) {
       return params.${p};
     })`,
   )(params);
+  console.log({ ret });
   return ret;
 }
 export function mergetree(tree: string | number | JTree, params: { [x: string]: any }): JElement {

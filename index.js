@@ -141,8 +141,10 @@ exports.mkhtml = mkhtml;
 // Params format:
 // { pname: tree, pname: attrib, }
 function pget(p, params) {
+    console.log({ p: p });
     p = p.slice(1);
     var ret = Function("(function(param) {\n      return params." + p + ";\n    })")(params);
+    console.log({ ret: ret });
     return ret;
 }
 function mergetree(tree, params) {
