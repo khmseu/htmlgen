@@ -63,6 +63,7 @@ function enc(s, who) {
 //   subtree,
 // ]
 function mkhtml(tree) {
+    console.log("mkhtml", { tree: tree });
     if (typeof tree !== "object" || !tree) {
         return [enc(tree, "tree is string")];
     }
@@ -149,7 +150,7 @@ function pget(p, params, where) {
     var F = Function(func);
     var FF = F();
     var ret = FF(params);
-    console.log({ where: where, params: params, p: p, p1: p1, func: func, F: F, FF: FF, ret: ret });
+    console.log("pget", { where: where, params: params, p: p, p1: p1, func: func, F: F, FF: FF, ret: ret });
     return ret;
 }
 function mergetree(tree, params) {
@@ -157,17 +158,17 @@ function mergetree(tree, params) {
     if (typeof tree === "string" && tree[0] === "$") {
         return mergetree(pget(tree, params, "$tree"), params);
     }
-    if (typeof tree !== "object" || !tree) {
+    else if (typeof tree !== "object" || !tree) {
         return "" + tree;
     }
     else {
         var name_2 = tree[0];
-        var attrs = tree[1];
-        var arr = [name_2, {}];
         if (name_2[0] === "$" && tree.length === 2) {
             var p = pget(name_2, params, "[$name,_]");
             return mergetree(p, params);
         }
+        var arr = [name_2, {}];
+        var attrs = tree[1];
         for (var attr in attrs) {
             if (attr[0] === "$") {
                 var p = pget(attr, params, "$attr=_");
@@ -189,6 +190,7 @@ function mergetree(tree, params) {
             var res = mergetree(e2, params);
             arr.push(res);
         }
+        console.log("mergetree:return", { arr: arr });
         return arr;
     }
 }

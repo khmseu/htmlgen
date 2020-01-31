@@ -37,7 +37,6 @@ import ents0 = require("html-entities");
 const ents = ents0.Html4Entities;
 import assert from "assert";
 import voidHtmlTags from "html-tags/void";
-import { parentPort } from "worker_threads";
 
 const singular: { [s: string]: 1 } = {
   "<if>": 1,
@@ -68,6 +67,7 @@ function enc(s: any, who: string) {
 //   subtree,
 // ]
 export function mkhtml(tree: JElement): string[] {
+  console.log("mkhtml", { tree });
   if (typeof tree !== "object" || !tree) {
     return [enc(tree, "tree is string")];
   } else if (classof(tree) === "Array" && (tree.length === 0 || classof(tree[0]) === "Array")) {
@@ -148,7 +148,7 @@ function pget(p: string, params: { [x: string]: any }, where: string): any {
   const F = Function(func);
   const FF = F();
   const ret = FF(params);
-  console.log({ where, params, p, p1, func, F, FF, ret });
+  console.log("pget", { where, params, p, p1, func, F, FF, ret });
   return ret;
 }
 
@@ -156,17 +156,16 @@ export function mergetree(tree: string | number | JTree, params: { [x: string]: 
   console.log("mergetree", { tree });
   if (typeof tree === "string" && tree[0] === "$") {
     return mergetree(pget(tree, params, "$tree"), params);
-  }
-  if (typeof tree !== "object" || !tree) {
+  } else if (typeof tree !== "object" || !tree) {
     return `${tree}`;
   } else {
     const name = tree[0];
-    const attrs = tree[1];
-    const arr: JTree = [name, {}];
     if (name[0] === "$" && tree.length === 2) {
       const p = pget(name, params, "[$name,_]");
       return mergetree(p, params);
     }
+    const arr: JTree = [name, {}];
+    const attrs = tree[1];
     for (const attr in attrs) {
       if (attr[0] === "$") {
         const p = pget(attr, params, "$attr=_");
@@ -185,6 +184,7 @@ export function mergetree(tree: string | number | JTree, params: { [x: string]: 
       const res = mergetree(e2, params);
       arr.push(res);
     }
+    console.log("mergetree:return", { arr });
     return arr;
   }
 }
