@@ -153,6 +153,7 @@ function pget(p: string, params: { [x: string]: any }, where: string): any {
 }
 
 export function mergetree(tree: string | number | JTree, params: { [x: string]: any }): JElement {
+  console.log("mergetree", { tree });
   if (typeof tree === "string" && tree[0] === "$") {
     return mergetree(pget(tree, params, "$tree"), params);
   }

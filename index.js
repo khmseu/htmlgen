@@ -153,6 +153,7 @@ function pget(p, params, where) {
     return ret;
 }
 function mergetree(tree, params) {
+    console.log("mergetree", { tree: tree });
     if (typeof tree === "string" && tree[0] === "$") {
         return mergetree(pget(tree, params, "$tree"), params);
     }
