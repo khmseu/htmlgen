@@ -163,12 +163,12 @@ export function mergetree(tree: string | number | JTree, params: { [x: string]: 
     const attrs = tree[1];
     const arr: JTree = [name, {}];
     if (name[0] === "$" && tree.length === 2) {
-      const p = pget(name, params, "tree:[$name,_]");
+      const p = pget(name, params, "[$name,_]");
       return mergetree(p, params);
     }
     for (const attr in attrs) {
       if (attr[0] === "$") {
-        const p = pget(attr, params, "$attr");
+        const p = pget(attr, params, "$attr=_");
         arr[1][p[0]] = `${p[1]}`;
       } else {
         const v = `${attrs[attr]}`;
@@ -176,7 +176,7 @@ export function mergetree(tree: string | number | JTree, params: { [x: string]: 
           const p = pget(v, params, "attr=$");
           arr[1][attr] = `${p}`;
         } else {
-          arr[1][attr] = `${v}`;
+          arr[1][attr] = v;
         }
       }
     }

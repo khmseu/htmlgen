@@ -164,12 +164,12 @@ function mergetree(tree, params) {
         var attrs = tree[1];
         var arr = [name_2, {}];
         if (name_2[0] === "$" && tree.length === 2) {
-            var p = pget(name_2, params, "tree:[$name,_]");
+            var p = pget(name_2, params, "[$name,_]");
             return mergetree(p, params);
         }
         for (var attr in attrs) {
             if (attr[0] === "$") {
-                var p = pget(attr, params, "$attr");
+                var p = pget(attr, params, "$attr=_");
                 arr[1][p[0]] = "" + p[1];
             }
             else {
@@ -179,7 +179,7 @@ function mergetree(tree, params) {
                     arr[1][attr] = "" + p;
                 }
                 else {
-                    arr[1][attr] = "" + v;
+                    arr[1][attr] = v;
                 }
             }
         }
