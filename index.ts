@@ -2,7 +2,7 @@
 
 // $Id: htmlgen.ts 24 2020-01-12 15:09:51Z kai $
 
-export type JHash = { [name: string]: string | number };
+export type JHash = { [name: string]: string | number | string[] };
 export type JElement = string | JTree;
 export type JArrayElement = JHash | JElement;
 export type JArray = JArrayElement[];
@@ -52,7 +52,9 @@ function classof(obj: any) {
 }
 
 function enc(s: any, who: string) {
-  let s1 = String(s);
+  let s1;
+  if (Array.isArray(s)) s1 = s.join(" ");
+  else s1 = String(s);
   let lines = s1.split("\n");
   lines = lines.map((ents as any).encode);
   return lines.join("\n");

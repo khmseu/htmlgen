@@ -49,7 +49,11 @@ function classof(obj) {
     return typeof obj === "object" ? (obj === null ? "null" : Object.getPrototypeOf(obj).constructor.name) : typeof obj;
 }
 function enc(s, who) {
-    var s1 = String(s);
+    var s1;
+    if (Array.isArray(s))
+        s1 = s.join(" ");
+    else
+        s1 = String(s);
     var lines = s1.split("\n");
     lines = lines.map(ents.encode);
     return lines.join("\n");
