@@ -157,6 +157,11 @@ function pget(p, params, where) {
     // console.log("pget", { where, params, p, p1, func, F, FF, ret });
     return ret;
 }
+function getAttr(attrVal) {
+    var v0 = Array.isArray(attrVal) ? attrVal.join(" ") : attrVal;
+    var v = "" + v0;
+    return v;
+}
 function mergetree(tree, params) {
     // console.log("mergetree", { tree });
     if (typeof tree === "string" && tree[0] === "$") {
@@ -177,13 +182,13 @@ function mergetree(tree, params) {
         for (var attr in attrs) {
             if (attr[0] === "$") {
                 var p = pget(attr, params, "$attr=_");
-                arr[1][p[0]] = "" + p[1];
+                arr[1][p[0]] = getAttr(p[1]);
             }
             else {
-                var v = "" + attrs[attr];
+                var v = getAttr(attrs[attr]);
                 if (v[0] === "$") {
                     var p = pget(v, params, "attr=$");
-                    arr[1][attr] = "" + p;
+                    arr[1][attr] = getAttr(p);
                 }
                 else {
                     arr[1][attr] = v;

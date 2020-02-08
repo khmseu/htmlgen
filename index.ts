@@ -154,6 +154,12 @@ function pget(p: string, params: { [x: string]: any }, where: string): any {
   return ret;
 }
 
+function getAttr(attrVal: string | number | any[]) {
+  let v0 = Array.isArray(attrVal) ? attrVal.join(" ") : attrVal;
+  const v = `${v0}`;
+  return v;
+}
+
 export function mergetree(tree: string | number | JTree, params: { [x: string]: any }): JElement {
   // console.log("mergetree", { tree });
   if (typeof tree === "string" && tree[0] === "$") {
@@ -172,12 +178,12 @@ export function mergetree(tree: string | number | JTree, params: { [x: string]: 
     for (const attr in attrs) {
       if (attr[0] === "$") {
         const p = pget(attr, params, "$attr=_");
-        arr[1][p[0]] = `${p[1]}`;
+        arr[1][p[0]] = getAttr(p[1]);
       } else {
-        const v = `${attrs[attr]}`;
+        let v = getAttr(attrs[attr]);
         if (v[0] === "$") {
           const p = pget(v, params, "attr=$");
-          arr[1][attr] = `${p}`;
+          arr[1][attr] = getAttr(p);
         } else {
           arr[1][attr] = v;
         }
